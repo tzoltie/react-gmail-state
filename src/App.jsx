@@ -6,7 +6,14 @@ import './styles/App.css'
 
 function App() {
 
-  const [email, setEmail] = useState(initialEmails)
+  const [emails, setEmails] = useState(initialEmails)
+  const [email, setEachEmail] = useState({
+    id: null,
+    sender: '',
+    title: '',
+    starred: false,
+    read: false
+  })
   
 
   const isRead = (email) => {
@@ -19,10 +26,23 @@ function App() {
 
   const isStarred = (email) => {
     if(email.starred) {
-      return 'star-checkbox'
-    } else {
-      return ''
+      return 'checked'
     }
+  }
+
+  const toggleStar = () => {
+    setEachEmail({
+      ...email,
+      starred: !email.starred
+    })
+  }
+
+  const toggleRead = () => {
+    setEachEmail({
+      ...email,
+      read: !email.read
+    })
+    isRead()
   }
   
 
@@ -59,14 +79,14 @@ function App() {
       </nav>
       <main className="emails">
         <ul>
-          {email.map((email, index) => {
+          {emails.map((email, index) => {
             return (
               <li key={index} className={isRead(email)}>
                 <div className='select'>
-                  <input type='checkbox'/> 
+                  <input type='checkbox' onChange={toggleRead}/> 
                 </div>
                 <div className='star'>
-                  <input type='checkbox' className={isStarred(email)}/>
+                  <input type='checkbox' className='star-checkbox' checked={isStarred(email)} onChange={toggleStar}/>
                 </div>
                 <div className='sender'> {email.sender} </div>
                 <div className='title'> {email.title} </div>
