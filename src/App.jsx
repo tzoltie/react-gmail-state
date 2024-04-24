@@ -1,11 +1,30 @@
+import { useState } from 'react'
 import Header from './components/Header'
 import initialEmails from './data/emails'
 
 import './styles/App.css'
 
 function App() {
-  // Use initialEmails for state
-  console.log(initialEmails)
+
+  const [email, setEmail] = useState(initialEmails)
+  
+
+  const isRead = (email) => {
+    if(email.read) {
+      return 'email read'
+    } else {
+      return 'email unread'
+    }
+  }
+
+  const isStarred = (email) => {
+    if(email.starred) {
+      return 'star-checkbox'
+    } else {
+      return ''
+    }
+  }
+  
 
   return (
     <div className="app">
@@ -28,7 +47,7 @@ function App() {
           </li>
 
           <li className="item toggle">
-            <label for="hide-read">Hide read</label>
+            <label htmlFor="hide-read">Hide read</label>
             <input
               id="hide-read"
               type="checkbox"
@@ -38,7 +57,24 @@ function App() {
           </li>
         </ul>
       </nav>
-      <main className="emails">{/* Render a list of emails here */}</main>
+      <main className="emails">
+        <ul>
+          {email.map((email, index) => {
+            return (
+              <li key={index} className={isRead(email)}>
+                <div className='select'>
+                  <input type='checkbox'/> 
+                </div>
+                <div className='star'>
+                  <input type='checkbox' className={isStarred(email)}/>
+                </div>
+                <div className='sender'> {email.sender} </div>
+                <div className='title'> {email.title} </div>
+              </li>
+            )
+          })}
+        </ul>
+        </main>
     </div>
   )
 }
